@@ -1,0 +1,48 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: cost-metrics-exporter
+  namespace: costmanagement-metrics-operator
+  labels:
+    app: cost-metrics-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cost-metrics-exporter
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: cost-metrics-exporter
+    spec:
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30
+      securityContext: {}
+      containers:
+        - resources: {}
+          terminationMessagePath: /dev/termination-log
+          name: cost-metrics-exporter
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          imagePullPolicy: Always
+          terminationMessagePolicy: File
+          image: >-
+            image-registry.openshift-image-registry.svc:5000/costmanagement-metrics-operator/cost-metrics-exporter:latest
+          volumeMounts:
+            - name: costmanagement-metrics-operator-reports
+              mountPath: /tmp/costmanagement-metrics-operator-reports
+      volumes:
+        - name: costmanagement-metrics-operator-reports
+          persistentVolumeClaim:
+            claimName: cost-shared-pvc
+      dnsPolicy: ClusterFirst
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600

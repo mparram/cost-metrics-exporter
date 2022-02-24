@@ -1,0 +1,12 @@
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  name: cost-metrics-exporter
+  namespace: costmanagement-metrics-operator
+  labels:
+    app: cost-metrics-exporter
+    app.openshift.io/runtime: nodejs
+    app.openshift.io/runtime-version: 12-ubi8
+spec:
+  lookupPolicy:
+    local: false

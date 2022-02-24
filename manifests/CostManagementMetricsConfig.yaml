@@ -1,0 +1,37 @@
+apiVersion: costmanagement-metrics-cfg.openshift.io/v1beta1
+kind: CostManagementMetricsConfig
+metadata:
+  name: costmanagementmetricscfg-sample-v1beta1
+  namespace: costmanagement-metrics-operator
+spec:
+  api_url: 'https://cloud.redhat.com'
+  authentication:
+    type: token
+  packaging:
+    max_reports_to_store: 30
+    max_size_MB: 100
+  prometheus_config:
+    context_timeout: 120
+    service_address: 'https://thanos-querier.openshift-monitoring.svc:9091'
+    skip_tls_verification: false
+  source:
+    check_cycle: 1440
+    create_source: false
+    name: INSERT-SOURCE-NAME
+    sources_path: /api/sources/v1.0/
+  upload:
+    ingress_path: /api/ingress/v1/upload
+    upload_cycle: 360
+    upload_toggle: false
+    validate_cert: true
+  volume_claim_template:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: cost-shared-pvc
+    spec:
+      accessModes:
+        - ReadWriteMany
+      resources:
+        requests:
+          storage: 10Gi

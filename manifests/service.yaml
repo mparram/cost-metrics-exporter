@@ -3,6 +3,8 @@ kind: Service
 metadata:
   name: cost-metrics-exporter
   namespace: costmanagement-metrics-operator
+  labels:
+    app: cost-metrics-exporter
 spec:
   selector:
     app: cost-metrics-exporter

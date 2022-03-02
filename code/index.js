@@ -254,6 +254,7 @@ function readData(){
                                 podLabels.forEach((podLabel, index, array) => {
                                     if (podLabel.indexOf("label_" + categorizationLabels.toLowerCase() + ":") === 0) {
                                         var podLabelArr = podLabel.split(":");
+                                        console.log("pod finded: " + podLabelArr[1]);
                                         labelValue = podLabelArr[1];
                                     }
                                 });
@@ -303,7 +304,7 @@ function readData(){
                                 objOfMetrics[lineData[5] + '|' + 'metricRequestMemoryByteSeconds' + '|month|' + currentMonth] += Number(lineData[11]);
                                 objOfMetrics[lineData[5] + '|' + 'metricLimitMemoryByteSeconds' + '|month|' + currentMonth] += Number(lineData[12]);
 
-                                if ((labelValue != "") && (labelValue != "undefined")) {
+                                if (typeof labelValue != "undefined") {
                                     if (!objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|hour|' + currentHour + "|" + labelValue]) {
                                         objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|hour|' + currentHour + "|" + labelValue] = 0;
                                         objOfMetrics[lineData[5] + '|' + 'metricRequestCpuCoreSeconds' + '|hour|' + currentHour + "|" + labelValue] = 0;

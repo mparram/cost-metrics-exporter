@@ -21,7 +21,7 @@ spec:
     sources_path: /api/sources/v1.0/
   upload:
     ingress_path: /api/ingress/v1/upload
-    upload_cycle: 360
+    upload_cycle: 60
     upload_toggle: false
     validate_cert: true
   volume_claim_template:

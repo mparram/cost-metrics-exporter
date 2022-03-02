@@ -12,50 +12,50 @@ app.use(fileupload());
 var filesHash = new Array();
 var objOfMetrics = {};
 var gracePeriodRunning = false;
+
 // ####################
 // options to configure
 // ####################
+var categorizationLabels = process.env.CAT_LABELS ? process.env.CAT_LABELS : false;
+var maxHours = process.env.MAX_HOURS ? process.env.MAX_HOURS : 24;
+var maxDays = process.env.MAX_DAYS ? process.env.MAX_DAYS : 30;
+var maxMonths = process.env.MAX_MONTHS ? process.env.MAX_MONTHS : 12;
+var gracePeriodAtUpload = process.env.GRACE_PERIOD_AT_UPLOAD ? process.env.GRACE_PERIOD_AT_UPLOAD : 10000;
+var pvpath = process.env.PV_PATH ? process.env.PV_PATH : '/tmp/costmanagement-metrics-operator-reports/upload';
+var pvbckpath = process.env.PV_BCK_PATH ? process.env.PV_BCK_PATH : '/tmp/costmanagement-metrics-operator-reports/metrics-backup';
 
-//TODO: implement metrics based on pod labels
-// var categorizationLabels = ['label1','label2'];
-var categorizationLabels = ['jiraProjectKey'];
-var maxHours = 24;
-var maxDays = 30;
-var maxMonths = 12;
-var gracePeriodAtUpload = 10000;
-var pvpath = "/tmp/costmanagement-metrics-operator-reports/upload";
-var pvbckpath = "/tmp/costmanagement-metrics-operator-reports/metrics-backup";
+
 // register metrics
 const register = new prometheus.Registry();
 const metricUsageCpuCoreSeconds = new prometheus.Gauge({
     name: 'namespace_usage_cpu_core_seconds',
     help: 'units of cores usaged and seconds aggregated by namespace',
-    labelNames: ['interval_type', 'interval_date', 'namespace', 'ns_labels']
+    labelNames: ['interval_type', 'interval_date', 'namespace', 'category_label']
 });
 const metricRequestCpuCoreSeconds = new prometheus.Gauge({
     name: 'namespace_request_cpu_core_seconds',
     help: 'units of cores requested and seconds aggregated by namespace',
-    labelNames: ['interval_type', 'interval_date', 'namespace', 'ns_labels']
+    labelNames: ['interval_type', 'interval_date', 'namespace', 'category_label']
 });
 const metricLimitCpuCoreSeconds = new prometheus.Gauge({
     name: 'namespace_limit_cpu_core_seconds',
     help: 'units of cores limited and seconds aggregated by namespace',
-    labelNames: ['interval_type', 'interval_date', 'namespace', 'ns_labels']
+    labelNames: ['interval_type', 'interval_date', 'namespace', 'category_label']
 });
 const metricUsageMemoryByteSeconds = new prometheus.Gauge({
-    name: 'namespace_usage_memory_byte_core_seconds',
+    name: 'namespace_usage_memory_byte_seconds',
     help: 'units of memory bytes usaged and seconds aggregated by namespace',
-    labelNames: ['interval_type', 'interval_date', 'namespace', 'ns_labels']
+    labelNames: ['interval_type', 'interval_date', 'namespace', 'category_label']
 });
 const metricRequestMemoryByteSeconds = new prometheus.Gauge({
-    name: 'namespace_request_memory_byte_core_seconds',
+    name: 'namespace_request_memory_byte_seconds',
     help: 'units of memory bytes requested and seconds aggregated by namespace',
-    labelNames: ['interval_type', 'interval_date', 'namespace', 'ns_labels']
+    labelNames: ['interval_type', 'interval_date', 'namespace', 'category_label']
 });
 const metricLimitMemoryByteSeconds = new prometheus.Gauge({
-    name: 'namespace_limit_memory_byte_core_seconds',
+    name: 'namespace_limit_memory_byte_seconds',
     help: 'units of memory bytes limited and seconds aggregated by namespace',
-    labelNames: ['interval_type', 'interval_date', 'namespace', 'ns_labels']
+    labelNames: ['interval_type', 'interval_date', 'namespace', 'category_label']
 });
 register.registerMetric(metricUsageCpuCoreSeconds);
 register.registerMetric(metricRequestCpuCoreSeconds);
@@ -216,6 +216,7 @@ function aggregateData() {
             var lineData = key.split('|');
             if ((lineData[2] === 'hour') && (new Date(lineData[3]) < diffHours)) {
                 // delete objOfMetrics[key] from array
+                console.log("purge hour metric: " +  objOfMetrics[key]);
                 delete objOfMetrics[key];
             } else if ((lineData[2] === 'day') && (new Date(lineData[3]) < diffDays)) {
                 // delete objOfMetrics[key] from array
@@ -252,8 +253,20 @@ function readData(){
                                 var currentHour = lineData[2];
                                 var currentDay = currentHour.substring(0, 10);
                                 var currentMonth = currentDay.substring(0, 7);
+                                var podLabels = lineData[18].split('|');
+                                var labelValue;
+                                forEach(podLabels, (podLabel, index, array) => {
+                                    // if podLabel start with categorizationLabels in minus, add to objOfMetrics
+                                    //convert categorizationLabels to minus chars
+
+                                    if (podLabel.indexOf(categorizationLabels.toLowerCase() + ":") === 0) {
+                                        labelValue = podLabel.substring(0,categorizationLabels.length);
+                                        console.log("labelValue: " + labelValue);
+                                    }
+                                });
                                 //currentDay = "2022-02-16";
-                                //currentMonth = "2022-02";            
+                                //currentMonth = "2022-02";    
+
                                 if (!objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|hour|' + currentHour]) {
                                     objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|hour|' + currentHour] = 0;
                                     objOfMetrics[lineData[5] + '|' + 'metricRequestCpuCoreSeconds' + '|hour|' + currentHour] = 0;
@@ -296,6 +309,51 @@ function readData(){
                                 objOfMetrics[lineData[5] + '|' + 'metricUsageMemoryByteSeconds' + '|month|' + currentMonth] += Number(lineData[10]);
                                 objOfMetrics[lineData[5] + '|' + 'metricRequestMemoryByteSeconds' + '|month|' + currentMonth] += Number(lineData[11]);
                                 objOfMetrics[lineData[5] + '|' + 'metricLimitMemoryByteSeconds' + '|month|' + currentMonth] += Number(lineData[12]);
+
+                                if (labelValue !== "") {
+                                    if (!objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|hour|' + currentHour + "|" + categorizationLabels + "|" + labelValue]) {
+                                        objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|hour|' + currentHour + "|" + categorizationLabels + "|" + labelValue] = 0;
+                                        objOfMetrics[lineData[5] + '|' + 'metricRequestCpuCoreSeconds' + '|hour|' + currentHour + "|" + categorizationLabels + "|" + labelValue] = 0;
+                                        objOfMetrics[lineData[5] + '|' + 'metricLimitCpuCoreSeconds' + '|hour|' + currentHour + "|" + categorizationLabels + "|" + labelValue] = 0;
+                                        objOfMetrics[lineData[5] + '|' + 'metricUsageMemoryByteSeconds' + '|hour|' + currentHour + "|" + categorizationLabels + "|" + labelValue] = 0;
+                                        objOfMetrics[lineData[5] + '|' + 'metricRequestMemoryByteSeconds' + '|hour|' + currentHour + "|" + categorizationLabels + "|" + labelValue] = 0;
+                                        objOfMetrics[lineData[5] + '|' + 'metricLimitMemoryByteSeconds' + '|hour|' + currentHour + "|" + categorizationLabels + "|" + labelValue] = 0;
+                                    }
+                                    if (!objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|day|' + currentDay + "|" + categorizationLabels + "|" + labelValue]) {
+                                        objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|day|' + currentDay + "|" + categorizationLabels + "|" + labelValue] = 0;
+                                        objOfMetrics[lineData[5] + '|' + 'metricRequestCpuCoreSeconds' + '|day|' + currentDay + "|" + categorizationLabels + "|" + labelValue] = 0;
+                                        objOfMetrics[lineData[5] + '|' + 'metricLimitCpuCoreSeconds' + '|day|' + currentDay + "|" + categorizationLabels + "|" + labelValue] = 0;
+                                        objOfMetrics[lineData[5] + '|' + 'metricUsageMemoryByteSeconds' + '|day|' + currentDay + "|" + categorizationLabels + "|" + labelValue] = 0;
+                                        objOfMetrics[lineData[5] + '|' + 'metricRequestMemoryByteSeconds' + '|day|' + currentDay + "|" + categorizationLabels + "|" + labelValue] = 0;
+                                        objOfMetrics[lineData[5] + '|' + 'metricLimitMemoryByteSeconds' + '|day|' + currentDay + "|" + categorizationLabels + "|" + labelValue] = 0;
+                                    }
+                                    if (!objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|month|' + currentMonth + "|" + categorizationLabels + "|" + labelValue]) {
+                                        objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|month|' + currentMonth + "|" + categorizationLabels + "|" + labelValue] = 0;
+                                        objOfMetrics[lineData[5] + '|' + 'metricRequestCpuCoreSeconds' + '|month|' + currentMonth + "|" + categorizationLabels + "|" + labelValue] = 0;
+                                        objOfMetrics[lineData[5] + '|' + 'metricLimitCpuCoreSeconds' + '|month|' + currentMonth + "|" + categorizationLabels + "|" + labelValue] = 0;
+                                        objOfMetrics[lineData[5] + '|' + 'metricUsageMemoryByteSeconds' + '|month|' + currentMonth + "|" + categorizationLabels + "|" + labelValue] = 0;
+                                        objOfMetrics[lineData[5] + '|' + 'metricRequestMemoryByteSeconds' + '|month|' + currentMonth + "|" + categorizationLabels + "|" + labelValue] = 0;
+                                        objOfMetrics[lineData[5] + '|' + 'metricLimitMemoryByteSeconds' + '|month|' + currentMonth + "|" + categorizationLabels + "|" + labelValue] = 0;
+                                    }
+                                    objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|hour|' + currentHour + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[7]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricRequestCpuCoreSeconds' + '|hour|' + currentHour + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[8]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricLimitCpuCoreSeconds' + '|hour|' + currentHour + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[9]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricUsageMemoryByteSeconds' + '|hour|' + currentHour + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[10]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricRequestMemoryByteSeconds' + '|hour|' + currentHour + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[11]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricLimitMemoryByteSeconds' + '|hour|' + currentHour + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[12]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|day|' + currentDay + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[7]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricRequestCpuCoreSeconds' + '|day|' + currentDay + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[8]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricLimitCpuCoreSeconds' + '|day|' + currentDay + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[9]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricUsageMemoryByteSeconds' + '|day|' + currentDay + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[10]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricRequestMemoryByteSeconds' + '|day|' + currentDay + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[11]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricLimitMemoryByteSeconds' + '|day|' + currentDay + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[12]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|month|' + currentMonth + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[7]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricRequestCpuCoreSeconds' + '|month|' + currentMonth + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[8]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricLimitCpuCoreSeconds' + '|month|' + currentMonth + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[9]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricUsageMemoryByteSeconds' + '|month|' + currentMonth + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[10]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricRequestMemoryByteSeconds' + '|month|' + currentMonth + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[11]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricLimitMemoryByteSeconds' + '|month|' + currentMonth + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[12]);
+                                } 
                             }
                         });
                     }
@@ -316,13 +374,17 @@ function readData(){
 }
 
 function buildMetrics(){
-    // labelNames: ['interval_type', 'interval_date', 'namespace', 'ns_labels']
+    // labelNames: ['interval_type', 'interval_date', 'namespace', 'category_label']
     // for each namespace in nsArr, build metrics
     var metricsArr = [];
     var fillMetrics = new Promise((resolve, reject) => {
         Object.keys(objOfMetrics).forEach((key,index, array) => {
             var lineData = key.split('|');
-            eval(lineData[1]).set({ interval_type: lineData[2], interval_date: lineData[3], namespace: lineData[0]}, Number(objOfMetrics[key]));
+            if (lineData[5]) {
+                eval(lineData[1]).set({ interval_type: lineData[2], interval_date: lineData[3], namespace: lineData[0], category_label: lineData[5]}, Number(objOfMetrics[key]));
+            } else {
+                eval(lineData[1]).set({ interval_type: lineData[2], interval_date: lineData[3], namespace: lineData[0]}, Number(objOfMetrics[key]));
+            }
             if (index === array.length -1) resolve();
         });
     });

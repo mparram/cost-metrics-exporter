@@ -380,6 +380,7 @@ function buildMetrics(){
         Object.keys(objOfMetrics).forEach((key,index, array) => {
             var lineData = key.split('|');
             if ((lineData[4] === null) || (lineData[4] == "undefined")) {
+                console.log("key: " + key);
                 eval(lineData[1]).set({ interval_type: lineData[2], interval_date: lineData[3], namespace: lineData[0]}, Number(objOfMetrics[key]));
             } else {
                 eval(lineData[1]).set({ interval_type: lineData[2], interval_date: lineData[3], namespace: lineData[0], category_label: lineData[4]}, Number(objOfMetrics[key]));

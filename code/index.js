@@ -258,7 +258,8 @@ function readData(){
                                 podLabels.forEach((podLabel, index, array) => {
                                     console.log
                                     if (podLabel.indexOf("label_" + categorizationLabels.toLowerCase() + ":") === 0) {
-                                        labelValue = podLabel.substring(0,categorizationLabels.length);
+                                        var podLabelArr = podLabel.split(":");
+                                        labelValue = podLabelArr[1];
                                         console.log("labelValue: " + labelValue);
                                     }
                                 });

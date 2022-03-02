@@ -374,9 +374,9 @@ function buildMetrics(){
         Object.keys(objOfMetrics).forEach((key,index, array) => {
             var lineData = key.split('|');
             if (typeof lineData[4] == "undefined") {
-                lineData[4] = lineData[4].replace(/_/g, "-");
                 eval(lineData[1]).set({ interval_type: lineData[2], interval_date: lineData[3], namespace: lineData[0]}, Number(objOfMetrics[key]));
             } else {
+                lineData[4] = lineData[4].replace(/_/g, "-");
                 eval(lineData[1]).set({ interval_type: lineData[2], interval_date: lineData[3], namespace: lineData[0], category_label: lineData[4]}, Number(objOfMetrics[key]));
             }
             if (index === array.length -1) resolve();

@@ -309,49 +309,49 @@ function readData(){
                                 objOfMetrics[lineData[5] + '|' + 'metricRequestMemoryByteSeconds' + '|month|' + currentMonth] += Number(lineData[11]);
                                 objOfMetrics[lineData[5] + '|' + 'metricLimitMemoryByteSeconds' + '|month|' + currentMonth] += Number(lineData[12]);
 
-                                if ((labelValue !== "") && (labelValue !== "undefined")) {
-                                    if (!objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|hour|' + currentHour + "|" + categorizationLabels + "|" + labelValue]) {
-                                        objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|hour|' + currentHour + "|" + categorizationLabels + "|" + labelValue] = 0;
-                                        objOfMetrics[lineData[5] + '|' + 'metricRequestCpuCoreSeconds' + '|hour|' + currentHour + "|" + categorizationLabels + "|" + labelValue] = 0;
-                                        objOfMetrics[lineData[5] + '|' + 'metricLimitCpuCoreSeconds' + '|hour|' + currentHour + "|" + categorizationLabels + "|" + labelValue] = 0;
-                                        objOfMetrics[lineData[5] + '|' + 'metricUsageMemoryByteSeconds' + '|hour|' + currentHour + "|" + categorizationLabels + "|" + labelValue] = 0;
-                                        objOfMetrics[lineData[5] + '|' + 'metricRequestMemoryByteSeconds' + '|hour|' + currentHour + "|" + categorizationLabels + "|" + labelValue] = 0;
-                                        objOfMetrics[lineData[5] + '|' + 'metricLimitMemoryByteSeconds' + '|hour|' + currentHour + "|" + categorizationLabels + "|" + labelValue] = 0;
+                                if ((labelValue != "") && (labelValue != "undefined")) {
+                                    if (!objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|hour|' + currentHour + "|" + labelValue]) {
+                                        objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|hour|' + currentHour + "|" + labelValue] = 0;
+                                        objOfMetrics[lineData[5] + '|' + 'metricRequestCpuCoreSeconds' + '|hour|' + currentHour + "|" + labelValue] = 0;
+                                        objOfMetrics[lineData[5] + '|' + 'metricLimitCpuCoreSeconds' + '|hour|' + currentHour + "|" + labelValue] = 0;
+                                        objOfMetrics[lineData[5] + '|' + 'metricUsageMemoryByteSeconds' + '|hour|' + currentHour + "|" + labelValue] = 0;
+                                        objOfMetrics[lineData[5] + '|' + 'metricRequestMemoryByteSeconds' + '|hour|' + currentHour + "|" + labelValue] = 0;
+                                        objOfMetrics[lineData[5] + '|' + 'metricLimitMemoryByteSeconds' + '|hour|' + currentHour + "|" + labelValue] = 0;
                                     }
-                                    if (!objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|day|' + currentDay + "|" + categorizationLabels + "|" + labelValue]) {
-                                        objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|day|' + currentDay + "|" + categorizationLabels + "|" + labelValue] = 0;
-                                        objOfMetrics[lineData[5] + '|' + 'metricRequestCpuCoreSeconds' + '|day|' + currentDay + "|" + categorizationLabels + "|" + labelValue] = 0;
-                                        objOfMetrics[lineData[5] + '|' + 'metricLimitCpuCoreSeconds' + '|day|' + currentDay + "|" + categorizationLabels + "|" + labelValue] = 0;
-                                        objOfMetrics[lineData[5] + '|' + 'metricUsageMemoryByteSeconds' + '|day|' + currentDay + "|" + categorizationLabels + "|" + labelValue] = 0;
-                                        objOfMetrics[lineData[5] + '|' + 'metricRequestMemoryByteSeconds' + '|day|' + currentDay + "|" + categorizationLabels + "|" + labelValue] = 0;
-                                        objOfMetrics[lineData[5] + '|' + 'metricLimitMemoryByteSeconds' + '|day|' + currentDay + "|" + categorizationLabels + "|" + labelValue] = 0;
+                                    if (!objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|day|' + currentDay + "|" + labelValue]) {
+                                        objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|day|' + currentDay + "|" + labelValue] = 0;
+                                        objOfMetrics[lineData[5] + '|' + 'metricRequestCpuCoreSeconds' + '|day|' + currentDay + "|" + labelValue] = 0;
+                                        objOfMetrics[lineData[5] + '|' + 'metricLimitCpuCoreSeconds' + '|day|' + currentDay + "|" + labelValue] = 0;
+                                        objOfMetrics[lineData[5] + '|' + 'metricUsageMemoryByteSeconds' + '|day|' + currentDay + "|" + labelValue] = 0;
+                                        objOfMetrics[lineData[5] + '|' + 'metricRequestMemoryByteSeconds' + '|day|' + currentDay + "|" + labelValue] = 0;
+                                        objOfMetrics[lineData[5] + '|' + 'metricLimitMemoryByteSeconds' + '|day|' + currentDay + "|" + labelValue] = 0;
                                     }
-                                    if (!objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|month|' + currentMonth + "|" + categorizationLabels + "|" + labelValue]) {
-                                        objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|month|' + currentMonth + "|" + categorizationLabels + "|" + labelValue] = 0;
-                                        objOfMetrics[lineData[5] + '|' + 'metricRequestCpuCoreSeconds' + '|month|' + currentMonth + "|" + categorizationLabels + "|" + labelValue] = 0;
-                                        objOfMetrics[lineData[5] + '|' + 'metricLimitCpuCoreSeconds' + '|month|' + currentMonth + "|" + categorizationLabels + "|" + labelValue] = 0;
-                                        objOfMetrics[lineData[5] + '|' + 'metricUsageMemoryByteSeconds' + '|month|' + currentMonth + "|" + categorizationLabels + "|" + labelValue] = 0;
-                                        objOfMetrics[lineData[5] + '|' + 'metricRequestMemoryByteSeconds' + '|month|' + currentMonth + "|" + categorizationLabels + "|" + labelValue] = 0;
-                                        objOfMetrics[lineData[5] + '|' + 'metricLimitMemoryByteSeconds' + '|month|' + currentMonth + "|" + categorizationLabels + "|" + labelValue] = 0;
+                                    if (!objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|month|' + currentMonth + "|" + labelValue]) {
+                                        objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|month|' + currentMonth + "|" + labelValue] = 0;
+                                        objOfMetrics[lineData[5] + '|' + 'metricRequestCpuCoreSeconds' + '|month|' + currentMonth + "|" + labelValue] = 0;
+                                        objOfMetrics[lineData[5] + '|' + 'metricLimitCpuCoreSeconds' + '|month|' + currentMonth + "|" + labelValue] = 0;
+                                        objOfMetrics[lineData[5] + '|' + 'metricUsageMemoryByteSeconds' + '|month|' + currentMonth + "|" + labelValue] = 0;
+                                        objOfMetrics[lineData[5] + '|' + 'metricRequestMemoryByteSeconds' + '|month|' + currentMonth + "|" + labelValue] = 0;
+                                        objOfMetrics[lineData[5] + '|' + 'metricLimitMemoryByteSeconds' + '|month|' + currentMonth + "|" + labelValue] = 0;
                                     }
-                                    objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|hour|' + currentHour + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[7]);
-                                    objOfMetrics[lineData[5] + '|' + 'metricRequestCpuCoreSeconds' + '|hour|' + currentHour + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[8]);
-                                    objOfMetrics[lineData[5] + '|' + 'metricLimitCpuCoreSeconds' + '|hour|' + currentHour + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[9]);
-                                    objOfMetrics[lineData[5] + '|' + 'metricUsageMemoryByteSeconds' + '|hour|' + currentHour + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[10]);
-                                    objOfMetrics[lineData[5] + '|' + 'metricRequestMemoryByteSeconds' + '|hour|' + currentHour + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[11]);
-                                    objOfMetrics[lineData[5] + '|' + 'metricLimitMemoryByteSeconds' + '|hour|' + currentHour + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[12]);
-                                    objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|day|' + currentDay + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[7]);
-                                    objOfMetrics[lineData[5] + '|' + 'metricRequestCpuCoreSeconds' + '|day|' + currentDay + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[8]);
-                                    objOfMetrics[lineData[5] + '|' + 'metricLimitCpuCoreSeconds' + '|day|' + currentDay + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[9]);
-                                    objOfMetrics[lineData[5] + '|' + 'metricUsageMemoryByteSeconds' + '|day|' + currentDay + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[10]);
-                                    objOfMetrics[lineData[5] + '|' + 'metricRequestMemoryByteSeconds' + '|day|' + currentDay + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[11]);
-                                    objOfMetrics[lineData[5] + '|' + 'metricLimitMemoryByteSeconds' + '|day|' + currentDay + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[12]);
-                                    objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|month|' + currentMonth + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[7]);
-                                    objOfMetrics[lineData[5] + '|' + 'metricRequestCpuCoreSeconds' + '|month|' + currentMonth + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[8]);
-                                    objOfMetrics[lineData[5] + '|' + 'metricLimitCpuCoreSeconds' + '|month|' + currentMonth + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[9]);
-                                    objOfMetrics[lineData[5] + '|' + 'metricUsageMemoryByteSeconds' + '|month|' + currentMonth + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[10]);
-                                    objOfMetrics[lineData[5] + '|' + 'metricRequestMemoryByteSeconds' + '|month|' + currentMonth + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[11]);
-                                    objOfMetrics[lineData[5] + '|' + 'metricLimitMemoryByteSeconds' + '|month|' + currentMonth + "|" + categorizationLabels + "|" + labelValue] += Number(lineData[12]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|hour|' + currentHour + "|" + labelValue] += Number(lineData[7]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricRequestCpuCoreSeconds' + '|hour|' + currentHour + "|" + labelValue] += Number(lineData[8]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricLimitCpuCoreSeconds' + '|hour|' + currentHour + "|" + labelValue] += Number(lineData[9]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricUsageMemoryByteSeconds' + '|hour|' + currentHour + "|" + labelValue] += Number(lineData[10]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricRequestMemoryByteSeconds' + '|hour|' + currentHour + "|" + labelValue] += Number(lineData[11]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricLimitMemoryByteSeconds' + '|hour|' + currentHour + "|" + labelValue] += Number(lineData[12]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|day|' + currentDay + "|" + labelValue] += Number(lineData[7]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricRequestCpuCoreSeconds' + '|day|' + currentDay + "|" + labelValue] += Number(lineData[8]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricLimitCpuCoreSeconds' + '|day|' + currentDay + "|" + labelValue] += Number(lineData[9]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricUsageMemoryByteSeconds' + '|day|' + currentDay + "|" + labelValue] += Number(lineData[10]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricRequestMemoryByteSeconds' + '|day|' + currentDay + "|" + labelValue] += Number(lineData[11]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricLimitMemoryByteSeconds' + '|day|' + currentDay + "|" + labelValue] += Number(lineData[12]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|month|' + currentMonth + "|" + labelValue] += Number(lineData[7]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricRequestCpuCoreSeconds' + '|month|' + currentMonth + "|" + labelValue] += Number(lineData[8]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricLimitCpuCoreSeconds' + '|month|' + currentMonth + "|" + labelValue] += Number(lineData[9]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricUsageMemoryByteSeconds' + '|month|' + currentMonth + "|" + labelValue] += Number(lineData[10]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricRequestMemoryByteSeconds' + '|month|' + currentMonth + "|" + labelValue] += Number(lineData[11]);
+                                    objOfMetrics[lineData[5] + '|' + 'metricLimitMemoryByteSeconds' + '|month|' + currentMonth + "|" + labelValue] += Number(lineData[12]);
                                 } 
                             }
                         });
@@ -379,10 +379,10 @@ function buildMetrics(){
     var fillMetrics = new Promise((resolve, reject) => {
         Object.keys(objOfMetrics).forEach((key,index, array) => {
             var lineData = key.split('|');
-            if (lineData[5] === null) {
+            if ((lineData[4] === null) || (lineData[4] == "undefined")) {
                 eval(lineData[1]).set({ interval_type: lineData[2], interval_date: lineData[3], namespace: lineData[0]}, Number(objOfMetrics[key]));
             } else {
-                eval(lineData[1]).set({ interval_type: lineData[2], interval_date: lineData[3], namespace: lineData[0], category_label: lineData[5]}, Number(objOfMetrics[key]));
+                eval(lineData[1]).set({ interval_type: lineData[2], interval_date: lineData[3], namespace: lineData[0], category_label: lineData[4]}, Number(objOfMetrics[key]));
             }
             if (index === array.length -1) resolve();
         });

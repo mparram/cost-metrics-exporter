@@ -254,7 +254,6 @@ function readData(){
                                 podLabels.forEach((podLabel, index, array) => {
                                     if (podLabel.indexOf("label_" + categorizationLabels.toLowerCase() + ":") === 0) {
                                         var podLabelArr = podLabel.split(":");
-                                        console.log("pod finded: " + podLabelArr[1]);
                                         labelValue = podLabelArr[1];
                                     }
                                 });
@@ -357,7 +356,6 @@ function readData(){
         });
     });
     buildArrays.then(() => {
-        console.log('Built metrics');
         setTimeout(() => {
             buildMetrics();
         }, 1000);
@@ -384,7 +382,6 @@ function buildMetrics(){
         });
     });
     fillMetrics.then(() => {
-        console.log('Built metrics');
         aggregateData();
         // delete all folders in ./extracted/*
         var deleteFolders = new Promise((resolve, reject) => {

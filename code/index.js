@@ -215,14 +215,10 @@ function aggregateData() {
         if (objOfMetrics[key] > 0) {
             var lineData = key.split('|');
             if ((lineData[2] === 'hour') && (new Date(lineData[3]) < diffHours)) {
-                // delete objOfMetrics[key] from array
-                console.log("purge hour metric: " +  objOfMetrics[key]);
                 delete objOfMetrics[key];
             } else if ((lineData[2] === 'day') && (new Date(lineData[3]) < diffDays)) {
-                // delete objOfMetrics[key] from array
                 delete objOfMetrics[key];
             } else if ((lineData[2] === 'month') && (new Date(lineData[3]) < diffMonths)) {
-                // delete objOfMetrics[key] from array
                 delete objOfMetrics[key];
             }
         }
@@ -379,10 +375,12 @@ function buildMetrics(){
     var fillMetrics = new Promise((resolve, reject) => {
         Object.keys(objOfMetrics).forEach((key,index, array) => {
             var lineData = key.split('|');
+            console.log("key: " + key);
             if ((lineData[4] === null) || (lineData[4] == "undefined")) {
-                console.log("key: " + key);
+
                 eval(lineData[1]).set({ interval_type: lineData[2], interval_date: lineData[3], namespace: lineData[0]}, Number(objOfMetrics[key]));
             } else {
+                console.log(key + " " + lineData[4] + " " + typeof lineData[4]);
                 eval(lineData[1]).set({ interval_type: lineData[2], interval_date: lineData[3], namespace: lineData[0], category_label: lineData[4]}, Number(objOfMetrics[key]));
             }
             if (index === array.length -1) resolve();

@@ -252,11 +252,9 @@ function readData(){
                                 var podLabels = lineData[18].split('|');
                                 var labelValue;
                                 podLabels.forEach((podLabel, index, array) => {
-                                    console.log
                                     if (podLabel.indexOf("label_" + categorizationLabels.toLowerCase() + ":") === 0) {
                                         var podLabelArr = podLabel.split(":");
                                         labelValue = podLabelArr[1];
-                                        console.log("labelValue: " + labelValue);
                                     }
                                 });
                                 //currentDay = "2022-02-16";
@@ -375,8 +373,8 @@ function buildMetrics(){
     var fillMetrics = new Promise((resolve, reject) => {
         Object.keys(objOfMetrics).forEach((key,index, array) => {
             var lineData = key.split('|');
-            console.log("key: " + key);
             if (typeof lineData[4] == "undefined") {
+                lineData[4] = lineData[4].replace(/_/g, "-");
                 eval(lineData[1]).set({ interval_type: lineData[2], interval_date: lineData[3], namespace: lineData[0]}, Number(objOfMetrics[key]));
             } else {
                 eval(lineData[1]).set({ interval_type: lineData[2], interval_date: lineData[3], namespace: lineData[0], category_label: lineData[4]}, Number(objOfMetrics[key]));

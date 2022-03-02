@@ -309,7 +309,7 @@ function readData(){
                                 objOfMetrics[lineData[5] + '|' + 'metricRequestMemoryByteSeconds' + '|month|' + currentMonth] += Number(lineData[11]);
                                 objOfMetrics[lineData[5] + '|' + 'metricLimitMemoryByteSeconds' + '|month|' + currentMonth] += Number(lineData[12]);
 
-                                if ((labelValue !== "") && (labelValue !== undefined)) {
+                                if ((labelValue !== "") && (labelValue !== "undefined")) {
                                     if (!objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|hour|' + currentHour + "|" + categorizationLabels + "|" + labelValue]) {
                                         objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|hour|' + currentHour + "|" + categorizationLabels + "|" + labelValue] = 0;
                                         objOfMetrics[lineData[5] + '|' + 'metricRequestCpuCoreSeconds' + '|hour|' + currentHour + "|" + categorizationLabels + "|" + labelValue] = 0;

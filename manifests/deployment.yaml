@@ -24,6 +24,42 @@ spec:
         - resources: {}
           terminationMessagePath: /dev/termination-log
           name: cost-metrics-exporter
+          env:
+            - name: CAT_LABELS
+              valueFrom:
+                configMapKeyRef:
+                  name: cost-exporter-metrics-cfg
+                  key: CAT_LABELS
+            - name: GRACE_PERIOD_AT_UPLOAD
+              valueFrom:
+                configMapKeyRef:
+                  name: cost-exporter-metrics-cfg
+                  key: GRACE_PERIOD_AT_UPLOAD
+            - name: MAX_DAYS
+              valueFrom:
+                configMapKeyRef:
+                  name: cost-exporter-metrics-cfg
+                  key: MAX_DAYS
+            - name: MAX_HOURS
+              valueFrom:
+                configMapKeyRef:
+                  name: cost-exporter-metrics-cfg
+                  key: MAX_HOURS
+            - name: MAX_MONTHS
+              valueFrom:
+                configMapKeyRef:
+                  name: cost-exporter-metrics-cfg
+                  key: MAX_MONTHS
+            - name: PV_BCK_PATH
+              valueFrom:
+                configMapKeyRef:
+                  name: cost-exporter-metrics-cfg
+                  key: PV_BCK_PATH
+            - name: PV_PATH
+              valueFrom:
+                configMapKeyRef:
+                  name: cost-exporter-metrics-cfg
+                  key: PV_PATH
           ports:
             - containerPort: 8080
               protocol: TCP

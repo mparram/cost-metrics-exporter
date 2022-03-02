@@ -1,0 +1,13 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cost-exporter-metrics-cfg
+  namespace: costmanagement-metrics-operator
+data:
+  CAT_LABELS: app
+  GRACE_PERIOD_AT_UPLOAD: '10000'
+  MAX_DAYS: '30'
+  MAX_HOURS: '24'
+  MAX_MONTHS: '12'
+  PV_BCK_PATH: /tmp/costmanagement-metrics-operator-reports/metrics-backup
+  PV_PATH: /tmp/costmanagement-metrics-operator-reports/upload

@@ -379,11 +379,10 @@ function buildMetrics(){
     var fillMetrics = new Promise((resolve, reject) => {
         Object.keys(objOfMetrics).forEach((key,index, array) => {
             var lineData = key.split('|');
-            if ((lineData[5] !== "undefined") && (lineData[5] !== "")) {
-                console.log("key: " + key);
-                eval(lineData[1]).set({ interval_type: lineData[2], interval_date: lineData[3], namespace: lineData[0], category_label: lineData[5]}, Number(objOfMetrics[key]));
-            } else {
+            if (lineData[5] === null) {
                 eval(lineData[1]).set({ interval_type: lineData[2], interval_date: lineData[3], namespace: lineData[0]}, Number(objOfMetrics[key]));
+            } else {
+                eval(lineData[1]).set({ interval_type: lineData[2], interval_date: lineData[3], namespace: lineData[0], category_label: lineData[5]}, Number(objOfMetrics[key]));
             }
             if (index === array.length -1) resolve();
         });

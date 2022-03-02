@@ -309,7 +309,7 @@ function readData(){
                                 objOfMetrics[lineData[5] + '|' + 'metricRequestMemoryByteSeconds' + '|month|' + currentMonth] += Number(lineData[11]);
                                 objOfMetrics[lineData[5] + '|' + 'metricLimitMemoryByteSeconds' + '|month|' + currentMonth] += Number(lineData[12]);
 
-                                if (labelValue !== "") {
+                                if ((labelValue !== "") && (labelValue !== undefined)) {
                                     if (!objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|hour|' + currentHour + "|" + categorizationLabels + "|" + labelValue]) {
                                         objOfMetrics[lineData[5] + '|' + 'metricUsageCpuCoreSeconds' + '|hour|' + currentHour + "|" + categorizationLabels + "|" + labelValue] = 0;
                                         objOfMetrics[lineData[5] + '|' + 'metricRequestCpuCoreSeconds' + '|hour|' + currentHour + "|" + categorizationLabels + "|" + labelValue] = 0;
@@ -379,7 +379,7 @@ function buildMetrics(){
     var fillMetrics = new Promise((resolve, reject) => {
         Object.keys(objOfMetrics).forEach((key,index, array) => {
             var lineData = key.split('|');
-            if (lineData[5]) {
+            if (lineData[5] != "undefined") {
                 eval(lineData[1]).set({ interval_type: lineData[2], interval_date: lineData[3], namespace: lineData[0], category_label: lineData[5]}, Number(objOfMetrics[key]));
             } else {
                 eval(lineData[1]).set({ interval_type: lineData[2], interval_date: lineData[3], namespace: lineData[0]}, Number(objOfMetrics[key]));

@@ -376,11 +376,9 @@ function buildMetrics(){
         Object.keys(objOfMetrics).forEach((key,index, array) => {
             var lineData = key.split('|');
             console.log("key: " + key);
-            if ((lineData[4] === null) || (lineData[4] == "undefined")) {
-
+            if (typeof lineData[4] == "undefined") {
                 eval(lineData[1]).set({ interval_type: lineData[2], interval_date: lineData[3], namespace: lineData[0]}, Number(objOfMetrics[key]));
             } else {
-                console.log(key + " " + lineData[4] + " " + typeof lineData[4]);
                 eval(lineData[1]).set({ interval_type: lineData[2], interval_date: lineData[3], namespace: lineData[0], category_label: lineData[4]}, Number(objOfMetrics[key]));
             }
             if (index === array.length -1) resolve();

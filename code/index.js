@@ -256,7 +256,8 @@ function readData(){
                                 var podLabels = lineData[18].split('|');
                                 var labelValue;
                                 podLabels.forEach((podLabel, index, array) => {
-                                    if ("label_" + podLabel.indexOf(categorizationLabels.toLowerCase() + ":") === 0) {
+                                    console.log
+                                    if (podLabel.indexOf("label_" + categorizationLabels.toLowerCase() + ":") === 0) {
                                         labelValue = podLabel.substring(0,categorizationLabels.length);
                                         console.log("labelValue: " + labelValue);
                                     }

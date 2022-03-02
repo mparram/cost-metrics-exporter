@@ -256,10 +256,7 @@ function readData(){
                                 var podLabels = lineData[18].split('|');
                                 var labelValue;
                                 podLabels.forEach((podLabel, index, array) => {
-                                    // if podLabel start with categorizationLabels in minus, add to objOfMetrics
-                                    //convert categorizationLabels to minus chars
-
-                                    if (podLabel.indexOf(categorizationLabels.toLowerCase() + ":") === 0) {
+                                    if ("label_" + podLabel.indexOf(categorizationLabels.toLowerCase() + ":") === 0) {
                                         labelValue = podLabel.substring(0,categorizationLabels.length);
                                         console.log("labelValue: " + labelValue);
                                     }

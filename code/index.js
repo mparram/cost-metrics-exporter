@@ -255,7 +255,7 @@ function readData(){
                                 var currentMonth = currentDay.substring(0, 7);
                                 var podLabels = lineData[18].split('|');
                                 var labelValue;
-                                forEach(podLabels, (podLabel, index, array) => {
+                                podLabels.forEach((podLabel, index, array) => {
                                     // if podLabel start with categorizationLabels in minus, add to objOfMetrics
                                     //convert categorizationLabels to minus chars
 
